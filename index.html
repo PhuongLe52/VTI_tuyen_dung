@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>VTI - Viet Thai International</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 :root{
   --bg:#f7f8fb; --card:#ffffff; --text:#1c2b4a; --muted:#5c6a85;
@@ -58,7 +57,6 @@ input,textarea{padding:10px;border-radius:8px;border:1px solid var(--border);bac
 .field{display:grid;gap:4px;}
 .success{color:var(--success);font-weight:600;display:none;margin-top:8px;}
 footer{text-align:center;color:var(--muted);font-size:.8rem;padding:20px;border-top:1px solid var(--border);}
-.admin-box{margin-top:30px;text-align:center;}
 .note{font-size:.78rem;color:var(--muted);margin-top:6px;}
 </style>
 </head>
@@ -100,11 +98,6 @@ footer{text-align:center;color:var(--muted);font-size:.8rem;padding:20px;border-
       <div class="success" id="successMsg">✓ Đã ghi nhận hồ sơ, cảm ơn bạn!</div>
     </form>
   </section>
-
-  <div class="admin-box">
-    <button class="btn btn-outline" id="exportBtn">Xuất danh sách ứng viên (Excel)</button>
-    <div class="note">Chỉ xuất được hồ sơ đã nộp trên trình duyệt này. Để thu thập tập trung nhiều ứng viên, nên dùng Google Form (xem hướng dẫn bên dưới trang chat).</div>
-  </div>
 </main>
 
 <footer>© 2026 VTI - Việt Thái Quốc Tế. Trang demo tuyển dụng.</footer>
@@ -223,24 +216,6 @@ document.getElementById('applyForm').addEventListener('submit', async function(e
   msg.style.display='block';
   setTimeout(()=>msg.style.display='none', 4000);
 });
-
-document.getElementById('exportBtn').onclick = ()=>{
-  const list = loadApplicants();
-  if(list.length===0){ alert('Chưa có hồ sơ nào được nộp trên trình duyệt này.'); return; }
-  const rows = list.map(a=>({
-    "Vị trí ứng tuyển": a.job,
-    "Họ và tên": a.fullName,
-    "Ngày sinh": a.dob,
-    "Email": a.email,
-    "SĐT": a.phone,
-    "Tên file CV": a.cvFileName,
-    "Thời gian nộp": a.submittedAt
-  }));
-  const ws = XLSX.utils.json_to_sheet(rows);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "UngVien");
-  XLSX.writeFile(wb, "danh_sach_ung_vien_VTI.xlsx");
-};
 </script>
 </body>
 </html>
